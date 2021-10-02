@@ -1,15 +1,25 @@
 import React from 'react';
 import { Link } from 'gatsby'
+import { useIdentityContext } from 'react-netlify-identity';
 
-const Profile = () => {
+
+const Profile = (showModal) => {
+    const identity = useIdentityContext();
+    const isLoggedIn = identity && identity.isLoggedIn;
+    
+    const name = identity && identity.user && identity.user.user_metadata && identity.user.user_metadata.full_name;
+    
     return (
-        <div className="dashboard-header">
-            <nav>
-                <Link to="/dashboard/secret" activeClassName="active">Secret Stuff</Link>
-                <Link to="/dashboard/base" activeClassName="active">See You Base</Link>
-            </nav>
-            <span>TODO: Show login status</span>
-        </div>
+        isLoggedIn && (
+
+            <div className="dashboard-header">
+                <nav>
+                    <Link to="/dashboard/secret" activeClassName="active">Secret Stuff</Link>
+                    <Link to="/dashboard/base" activeClassName="active">See You Base</Link>
+                </nav>
+                <span>Logged in as { name}. <button onClick={showModal} >logout</button> </span>
+            </div>
+        )
     )
 }
 
